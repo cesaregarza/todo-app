@@ -1,0 +1,35 @@
+.supermassivebox{
+    height: 100vh;
+}
+
+.bigbox{
+    width: 100%;
+    max-width: 500px;
+    height: 80%;
+}
+.hugebox{
+    height: 100%;
+    overflow: scroll;
+}
+.sortbuttons{
+
+}
+.appheader{
+    height: 130px;
+}
+.filters{
+
+}
+.circle{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px;
+    font-size: 10px;
+    line-height: 1.42;
+    border-radius: 15px;
+}
+
+.oneclick{
+    color: red;
+}
