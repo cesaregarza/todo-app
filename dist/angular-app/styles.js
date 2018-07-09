@@ -621,9 +621,9 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/cesargarza/Code/week4/todo copy/src/styles.css */"./src/styles.css");
-__webpack_require__(/*! /Users/cesargarza/Code/week4/todo copy/node_modules/bootstrap/dist/css/bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
-module.exports = __webpack_require__(/*! /Users/cesargarza/Code/week4/todo copy/node_modules/@fortawesome/fontawesome-free/css/all.css */"./node_modules/@fortawesome/fontawesome-free/css/all.css");
+__webpack_require__(/*! /Users/cesargarza/Code/week4/todo-app/src/styles.css */"./src/styles.css");
+__webpack_require__(/*! /Users/cesargarza/Code/week4/todo-app/node_modules/bootstrap/dist/css/bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
+module.exports = __webpack_require__(/*! /Users/cesargarza/Code/week4/todo-app/node_modules/@fortawesome/fontawesome-free/css/all.css */"./node_modules/@fortawesome/fontawesome-free/css/all.css");
 
 
 /***/ })
