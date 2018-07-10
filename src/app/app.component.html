@@ -37,14 +37,21 @@
           <div class="d-flex flex-row filters align-items-center">
             Filter:
             <div class="circles">
-              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="filterPress(1)">Mon</button>
-              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="filterPress(2)">Tue</button>
-              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="filterPress(3)">Wed</button>
-              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="filterPress(4)">Thu</button>
-              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="filterPress(5)">Fri</button>
-              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="filterPress(6)">Sat</button>
-              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="filterPress(0)">Sun</button>
+              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="false" (click)="filterPress(1)">Mon</button>
+              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="false" (click)="filterPress(2)">Tue</button>
+              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="false" (click)="filterPress(3)">Wed</button>
+              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="false" (click)="filterPress(4)">Thu</button>
+              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="false" (click)="filterPress(5)">Fri</button>
+              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="false" (click)="filterPress(6)">Sat</button>
+              <button class="btn btn-outline-primary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="false" (click)="filterPress(0)">Sun</button>
             </div>
+          </div>
+        </div>
+        <!-- /Create Button -->
+        <!-- Bottom Row -->
+        <div class="d-flex flex-row">
+          <div class="ml-auto">
+            <button style="width: 180px" class="btn btn-outline-secondary" (click)="toggleCompleted()">{{ completedButton[wantCompleted] }}</button>
           </div>
         </div>
       </div>
@@ -58,7 +65,7 @@
         </div>
         <!-- Second Row -->
         <div class="d-flex flex-row justify-content-end">
-          <input type="text" [(ngModel)]="newobj.todoname" placeholder="Task Name" class="mr-auto w-75 form-control is-required">
+          <input type="text" [(ngModel)]="newobj.todoname" placeholder="Task Name" class="mr-auto w-75 form-control is-required" (keyup.enter)="addNewTask()">
           <button class="btn btn-outline-dark btn-sm px-3" (click)="addNewTask()">Add</button>
         </div>
         <!-- Third Row -->
@@ -96,57 +103,77 @@
         </div>
       </div>
       <!-- /Create Button -->
-      <div class="row"><div class="col-12"><hr></div></div>
-      <!-- DISPLAY LIST STARTS HERE -->
-      <div *ngFor="let chore of todos; let i = index">
-        <div *ngIf="!chore.editable && displayFilter(i)" class="d-flex flex-row" (mouseover)="hover=i" (mouseleave)="hover=-1">
-          {{ chore.todoname }}
-          <div class="ml-auto">
-            <span *ngIf="!anyedited && hover == i" (click)="editTodo(i)">
-              <i class="fas fa-pencil-alt"></i>
-            </span>
-            <span *ngIf="!anyedited && hover == i" (click)="deleteTodo(i)" [ngClass]="tbdeleted == i ? ' modbuttons oneclick' : 'modbuttons'">
-              <i class="fas fa-trash"></i>
-            </span>
-          </div>
+      <div class="row">
+        <div class="col-12">
+          <hr>
         </div>
-        <div *ngIf="chore.editable">
-          <!-- First Row -->
-          <div class="d-flex flex-row justify-content-end">
-            <input type="text" [(ngModel)]="chore.todoname" placeholder="Task Name" class="mr-auto w-75 form-control is-required">
-            <button class="btn btn-outline-dark btn-sm px-3" (click)="finishEdit(i)">Done</button>
-          </div>
-          <!-- Second Row -->
-          <div class="d-flex flex-row justify-content-between">
-            <div class="mr-auto">
-              Priority:
-              <select [(ngModel)]="chore.priority">
-                <option value="1">High !!</option>
-                <option value="4" selected="selected">Normal </option>
-                <option value="7">Low --</option>
-              </select>
-            </div>
-            <div>
-              Due Date:
-              <input type="checkbox" [(ngModel)]="editobjdate">
-            </div>
-            <div class="pl-4">
-              <fieldset [disabled]="!editobjdate">
-                <input type="date" [(ngModel)]="chore.expiration" (change)="parseDate()">
-              </fieldset>
+      </div>
+      <!-- DISPLAY LIST STARTS HERE -->
+      <div class = "scrollbox">
+        <div *ngFor="let chore of todos; let i = index">
+          <div [ngClass]="(chore.completed === 2) ? 'done' : ''" *ngIf="!chore.editable && displayFilter(i) && (displayCompleted(i))"
+            class="d-flex flex-row" (mouseover)="hover=i" (mouseleave)="hover=-1">
+            {{ chore.todoname }}
+            <div class="ml-auto">
+              <span *ngIf="!anyedited && hover == i && chore.completed == 1" (click)="markComplete(i)">
+                <i class="far fa-circle"></i>
+              </span>
+              <span *ngIf="!anyedited && hover == i && chore.completed == 2" (click)="markComplete(i)">
+                <i class="far fa-dot-circle"></i>
+              </span>
+              <span *ngIf="!anyedited && hover == i" (click)="editTodo(i)">
+                <i class="fas fa-pencil-alt"></i>
+              </span>
+              <span *ngIf="!anyedited && hover == i" (click)="deleteTodo(i)" [ngClass]="tbdeleted == i ? ' modbuttons oneclick' : 'modbuttons'">
+                <i class="fas fa-trash"></i>
+              </span>
             </div>
           </div>
-          <!-- Third Row -->
-          <div class="d-flex flex-row">
-            <div class="circles ml-auto">
-              Repeat:
-              <button [ngClass] = "activeFilter(1, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="repeatPressx(1, i)">Mon</button>
-              <button [ngClass] = "activeFilter(2, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="repeatPressx(2, i)">Tue</button>
-              <button [ngClass] = "activeFilter(3, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="repeatPressx(3, i)">Wed</button>
-              <button [ngClass] = "activeFilter(4, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="repeatPressx(4, i)">Thu</button>
-              <button [ngClass] = "activeFilter(5, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="repeatPressx(5, i)">Fri</button>
-              <button [ngClass] = "activeFilter(6, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="repeatPressx(6, i)">Sat</button>
-              <button [ngClass] = "activeFilter(0, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button" data-toggle="button" aria-pressed="true" (click)="repeatPressx(0, i)">Sun</button>
+          <div *ngIf="chore.editable">
+            <!-- First Row -->
+            <div class="d-flex flex-row justify-content-end">
+              <input type="text" [(ngModel)]="chore.todoname" placeholder="Task Name" class="mr-auto w-75 form-control is-required">
+              <button class="btn btn-outline-dark btn-sm px-3" (click)="finishEdit(i)">Done</button>
+            </div>
+            <!-- Second Row -->
+            <div class="d-flex flex-row justify-content-between">
+              <div class="mr-auto">
+                Priority:
+                <select [(ngModel)]="chore.priority">
+                  <option value="1">High !!</option>
+                  <option value="4" selected="selected">Normal </option>
+                  <option value="7">Low --</option>
+                </select>
+              </div>
+              <div>
+                Due Date:
+                <input type="checkbox" [(ngModel)]="editobjdate">
+              </div>
+              <div class="pl-4">
+                <fieldset [disabled]="!editobjdate">
+                  <input type="date" [(ngModel)]="chore.expiration" (change)="parseDate()">
+                </fieldset>
+              </div>
+            </div>
+            <!-- Third Row -->
+            <div class="d-flex flex-row">
+              <div class="circles ml-auto">
+                Repeat:
+                <button [ngClass]="activeFilter(1, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button"
+                  data-toggle="button" aria-pressed="true" (click)="repeatPressx(1, i)">Mon</button>
+                <button [ngClass]="activeFilter(2, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button"
+                  data-toggle="button" aria-pressed="true" (click)="repeatPressx(2, i)">Tue</button>
+                <button [ngClass]="activeFilter(3, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button"
+                  data-toggle="button" aria-pressed="true" (click)="repeatPressx(3, i)">Wed</button>
+                <button [ngClass]="activeFilter(4, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button"
+                  data-toggle="button" aria-pressed="true" (click)="repeatPressx(4, i)">Thu</button>
+                <button [ngClass]="activeFilter(5, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button"
+                  data-toggle="button" aria-pressed="true" (click)="repeatPressx(5, i)">Fri</button>
+                <button [ngClass]="activeFilter(6, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button"
+                  data-toggle="button" aria-pressed="true" (click)="repeatPressx(6, i)">Sat</button>
+                <button [ngClass]="activeFilter(0, i) ? 'active' : ''" class="btn btn-outline-secondary btn-sm px-1 circle" type="button"
+                  data-toggle="button" aria-pressed="true" (click)="repeatPressx(0, i)">Sun</button>
+              </div>
             </div>
           </div>
         </div>

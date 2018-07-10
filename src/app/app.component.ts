@@ -31,6 +31,13 @@ export class AppComponent {
   tempdatex = new Date();
   tbdeleted = -1;
   hover = -1;
+  wantCompleted = 2;
+  completedButton = [
+    "",
+    "Hide Completed",
+    "Show All",
+    "Show Only Completed"
+  ];
 
 
   name = `Cesar`;
@@ -39,7 +46,7 @@ export class AppComponent {
   //Initialize! Errorcount is just to be flexible in case we want to add true verification later. We use loose comparison "==" to check for both null and undefined. Using strict comparison "===" would only check for null.
 
    let errorcount = 0;
-   if (this.newobj.todoname == null){
+   if (this.newobj.todoname == null || this.newobj.todoname === ""){
      errorcount++;
    }
    if (this.newobj.priority == null){
@@ -49,12 +56,17 @@ export class AppComponent {
    this.newobj.created = new Date(Date.now());
    this.newobj.editable = false;
    this.newobj.repeat = this.repeat;
+   this.newobj.completed = 1;
    
    //if we don't find errors, go ahead and push it to the list and run newTodo to clean up and go back to the main screen
    if (errorcount == 0){
      this.todos.push(this.newobj);
      this.newTodo();
    }
+  }
+
+  markComplete(input: number){
+    this.todos[input].completed = (this.todos[input].completed % 2) + 1;
   }
 
 
@@ -85,6 +97,13 @@ export class AppComponent {
   reSort(prop: number, order: number){
     
   }
+
+  toggleFilter(input: number, variable: number){
+    let p = (variable >> input);
+    p = p & 1;
+    return (p > 0) ? true: false;
+  }
+
   filterPress(input: number) {
     //Using binary logic, XOR 2 to the power of the filter ID, starting at 0 for Sunday and ending at 6 for Saturday. This ensures that each number has its own binary representation. The filter for Sunday, for example, will only be 0000001 for Sunday, 1000000 for Saturday, and 1000001 for Saturday AND Sunday. XOR will compare the current filter and assign a 1 if the current overall filter and the filter button being pressed have different bits, and a 0 if they have the same bits. In essence, it's establishing a toggle. If it's already on, XORing the 1's will put out a 0 at that ID, and if it's off, XORing the 1 of the filter being applied and the 0 of the current filter will put out a 1 at that ID.
     this.filter ^= 1 << input;
@@ -96,6 +115,14 @@ export class AppComponent {
   
   repeatPressx(input: number, indexx: number){
     this.todos[indexx].repeat ^= 1 << input;
+  }
+
+  displayCompleted(input: number){
+    if ((this.todos[input].completed ^ this.wantCompleted) > 0){
+      return true;
+    } else {
+      return false;
+    }
   }
 
   displayFilter(input: number){
@@ -116,6 +143,10 @@ export class AppComponent {
   cancelTodo(input: number) {
     this.todos[input].editable = false;
     this.anyedited = false;
+  }
+
+  toggleCompleted(){
+    this.wantCompleted = (this.wantCompleted % 3) + 1;
   }
 
   activeFilter(input: number, indexx: number) {
@@ -142,7 +173,7 @@ export class AppComponent {
 
   finishEdit(input: number){
     let errorcount = 0;
-    if (this.todos[input].todoname == null){
+    if (this.todos[input].todoname == null || this.todos[input].todoname === ""){
       errorcount++;
     }
 

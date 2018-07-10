@@ -27,7 +27,6 @@
     "popper.js": "^1.14.3",
     "rxjs": "^6.0.0",
     "sweetalert2": "^7.25.0",
-    "timsort": "^0.3.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

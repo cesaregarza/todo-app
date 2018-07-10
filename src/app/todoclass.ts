@@ -7,4 +7,5 @@ export class Todoclass {
     expiration?: Date;
     repeat?: number;
     dueday?: number;
+    completed: number;
 }

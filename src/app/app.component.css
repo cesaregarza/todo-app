@@ -9,7 +9,10 @@
 }
 .hugebox{
     height: 100%;
-    overflow: scroll;
+    overflow-y: auto;
+}
+.scrollbox{
+    overflow-y: auto;
 }
 .sortbuttons{
 
@@ -32,4 +35,9 @@
 
 .oneclick{
     color: red;
+}
+
+.done{
+    color: darkgray;
+    text-decoration: line-through;
 }
